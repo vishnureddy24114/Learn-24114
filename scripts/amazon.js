@@ -1,4 +1,4 @@
-const products = [
+/*const products = [
     {
         image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
         name: ' Black and Gray Athletic Cotton Socks - 6 Pairs',
@@ -25,8 +25,21 @@ const products = [
             count: 86
         },
         priceincents: 799
+    },
+    {
+        image: 'images/products/men-golf-polo-t-shirt-blue.jpg',
+        name: 'men-golf-polo-t-shirt-blue',
+        rating: {
+            stars: 4.0,
+            count: 186
+        },
+        priceincents: 1299  
     }
-];
+]; */
+
+import {cart , saveToStorage} from '../data/cart.js';
+import { products} from '../data/products.js';
+import { formatCurrency } from './utils/money.js';
 
 let productsHTML = '';
 
@@ -52,7 +65,7 @@ products.forEach((product) => {
             </div>
 
             <div class="product-price">
-            $${(product.priceincents/100).toFixed(2)}
+            $${formatCurrency(product.priceCents)}
             </div>
 
             <div class="product-quantity-container">
@@ -77,13 +90,63 @@ products.forEach((product) => {
             Added
             </div>
 
-            <button class="add-to-cart-button button-primary">
+            <button class="add-to-cart-button button-primary js-addtocart" data-product-id="${product.id}">
             Add to Cart
             </button>
         </div>
         `;
 });
 
-console.log(productsHTML);
+//console.log(productsHTML);
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
+
+function addToCart(productId)
+{
+    let matchingItem;
+    cart.forEach((item) =>{
+       if(productId === item.productId)
+       {
+        matchingItem =item;
+       }
+    });
+
+    if(matchingItem)
+    {
+        matchingItem.quantity += 1;
+    }
+    else
+    {
+        cart.push({
+            productId: productId,
+            quantity: 1
+        });
+   }
+
+   
+
+   saveToStorage();
+}
+
+function updateCartQuntity()
+{
+    let cartQuantity = 0;
+    cart.forEach((item) => {
+     cartQuantity += item.quantity;
+    });
+
+     document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+}
+
+document.querySelectorAll('.js-addtocart').forEach((button) => {
+    button.addEventListener('click', () => {
+        //console.log(button.dataset.productName);
+        const productId = button.dataset.productId;
+
+        addToCart(productId);
+
+        updateCartQuntity();
+       // console.log(cartQuantity);
+       // console.log(cart);
+    });
+});

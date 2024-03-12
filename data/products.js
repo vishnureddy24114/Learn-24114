@@ -1,4 +1,4 @@
-const products = [
+  export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     image: "images/products/athletic-cotton-socks-6-pairs.jpg",
@@ -236,7 +236,7 @@ const products = [
     name: "Electric Glass and Steel Hot Tea Water Kettle - 1.7-Liter",
     rating: {
       stars: 5,
-      count: 846
+      count: 847
     },
     priceCents: 3074,
     keywords: [
